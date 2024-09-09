@@ -53,7 +53,6 @@ router.post("/task-history", async (req, res) => {
   }
 
   const history = new TaskHistory({
-    id,
     task,
     from,
     to,
