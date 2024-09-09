@@ -15,7 +15,7 @@ router.get("/tasks", async (req, res) => {
 router.get("/task-history/:taskTitle", async (req, res) => {
   try {
     const { taskTitle } = req.params;
-    if (!taskId) {
+    if (!taskTitle) {
       return res.status(400).json({ message: "Task ID is required" });
     }
 
