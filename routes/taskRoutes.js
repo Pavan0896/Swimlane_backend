@@ -12,9 +12,21 @@ router.get("/tasks", async (req, res) => {
   }
 });
 
-router.get("/task-history", async (req, res) => {
+router.get("/task-history/:taskId", async (req, res) => {
   try {
-    const histories = await TaskHistory.find();
+    const { taskId } = req.params;
+    if (!taskId) {
+      return res.status(400).json({ message: "Task ID is required" });
+    }
+
+    const histories = await TaskHistory.find({ task: taskId });
+
+    if (histories.length === 0) {
+      return res
+        .status(404)
+        .json({ message: "No history found for this task" });
+    }
+
     res.json(histories);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -32,7 +44,23 @@ router.post("/tasks", async (req, res) => {
 });
 
 router.post("/task-history", async (req, res) => {
-  const history = new TaskHistory(req.body);
+  const { id, task, from, to, date, additionalInfo } = req.body;
+
+  if (!id || !task || !from || !to || !date) {
+    return res
+      .status(400)
+      .json({ message: "Task, from, to, and date are required" });
+  }
+
+  const history = new TaskHistory({
+    id,
+    task,
+    from,
+    to,
+    date,
+    additionalInfo,
+  });
+
   try {
     const newHistory = await history.save();
     res.status(201).json(newHistory);
