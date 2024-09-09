@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 
 const taskHistorySchema = new mongoose.Schema({
-  id: { type: String, required: true },
   task: { type: String, required: true },
   from: { type: String, required: true },
   to: { type: String, required: true },

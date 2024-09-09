@@ -12,14 +12,14 @@ router.get("/tasks", async (req, res) => {
   }
 });
 
-router.get("/task-history/:taskId", async (req, res) => {
+router.get("/task-history/:taskTitle", async (req, res) => {
   try {
-    const { taskId } = req.params;
+    const { taskTitle } = req.params;
     if (!taskId) {
       return res.status(400).json({ message: "Task ID is required" });
     }
 
-    const histories = await TaskHistory.find({ task: taskId });
+    const histories = await TaskHistory.find({ task: taskTitle });
 
     if (histories.length === 0) {
       return res
@@ -44,9 +44,9 @@ router.post("/tasks", async (req, res) => {
 });
 
 router.post("/task-history", async (req, res) => {
-  const { id, task, from, to, date, additionalInfo } = req.body;
+  const { task, from, to, date, additionalInfo } = req.body;
 
-  if (!id || !task || !from || !to || !date) {
+  if (!task || !from || !to || !date) {
     return res
       .status(400)
       .json({ message: "Task, from, to, and date are required" });
